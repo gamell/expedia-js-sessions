@@ -17,9 +17,19 @@ var Picture = React.createClass({
 });
 
 var Likes = React.createClass({
-    render: function() {
-      return null;
-    }
+  loadLikesFromServer: function() {
+    return {likes: 10};
+  }
+  getInitialState: function() {
+    return {likes: 0};
+  },
+  componentDidMount: function() {
+    this.loadCommentsFromServer();
+    setInterval(this.loadCommentsFromServer, this.props.pollInterval);
+  },
+  render: function() {
+    return null;
+  }
 });
 
 var Comment = React.createClass({
