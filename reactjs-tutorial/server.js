@@ -17,6 +17,7 @@ var bodyParser = require('body-parser');
 var app = express();
 
 var COMMENTS_FILE = path.join(__dirname, 'comments.json');
+var PICTURE_FILES = [path.join(__dirname, 'picture.json'), path.join(__dirname, 'picture.json')];
 
 app.set('port', (process.env.PORT || 3000));
 
@@ -35,7 +36,18 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.get('/api/comments', function(req, res) {
+app.get('/api/pictures/:id', function(req, res) {
+  const pictureId = req.params.id;
+  fs.readFile(PICTURE_FILES[pictureId], function(err, data) {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+    res.json(JSON.parse(data));
+  });
+});
+
+app.get('/api/pictures/:id/comments', function(req, res) {
   fs.readFile(COMMENTS_FILE, function(err, data) {
     if (err) {
       console.error(err);
@@ -45,7 +57,7 @@ app.get('/api/comments', function(req, res) {
   });
 });
 
-app.post('/api/comments', function(req, res) {
+app.post('/api/pictures/:id/comments', function(req, res) {
   fs.readFile(COMMENTS_FILE, function(err, data) {
     if (err) {
       console.error(err);
