@@ -18,30 +18,49 @@ var DetailView = React.createClass({
         dataType: 'json',
         cache: false,
         success: function(data) {
-          this.setState({data: data});
+          console.log('DetailedView data: '+JSON.stringify(data));
+          this.setState(data);
         }.bind(this),
         error: function(xhr, status, err) {
           console.error(this.props.api, status, err.toString());
         }.bind(this)
       });
     },
+    componentDidMount: function() {
+      this.getPictureData();
+    },
     render: function() {
       return(
         <div className="picture-post">
-          <Picture api="/api/pictures/0" />
-          // <Likes />
-          // <Caption />
+          <Picture url={this.state.url} />
+          <Likes likes={this.state.likes}/>
+          {/*<Caption /> */}
+          <Caption caption={this.state.caption} />
           <CommentBox url="/api/pictures/0/comments" pollInterval={2000} />
         </div>
       )
     }
 });
 
+var Caption = React.createClass({
+  render: function() {
+    return (
+      <p> {this.props.caption} </p>
+    );
+  }
+});
+
+var Likes = React.createClass({
+  render: function() {
+    return (
+      <p>{this.props.likes}</p>
+    );
+  }
+});
 var Picture = React.createClass({
     render: function() {
-      let data = this.props.data;
       return(
-        <img src={data.url} />
+        <img src={this.props.url} />
       );
     }
 });
